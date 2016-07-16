@@ -1,44 +1,47 @@
-var mysql = require('mysql');
 var inquirer = require('inquirer');
-// connecting to bamazon_db
-var connection=mysql.createConnection({
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    password: 'Kelcy',
-    database: 'Bamazon_DB'
-})
-//checks connection
-connection.connect(function(err){
-    if(err) throw err;
-    console.log('')
-    console.log("Welcome to Bamazon!!");
-    console.log('');})
 
+var mysql = require('mysql');
+var connection = mysql.createConnection({
+  host: 'localhost',
+  port: 3306,
+  user: 'root',
+  password: 'Kelcy',
+  database: 'bamazon_DB'
+});
 
-//runs the order function
+// connect to bamazon database
+connection.connect(function(err) {
 
+  if (err) throw err;
+
+  console.log('connected as id ' + connection.threadId);
+});
 order();
 
 function order(){
+// display all of the items that are for sale: IDs, names, and price
   connection.query('SELECT * FROM Products',function(err,res){
   for(var i=0;i<res.length;i++){
-  	console.log('************************');
-    console.log('Product Name:' +res[i].ProductName);
-    console.log('Department Name:' +res[i].DepartmentName);
-    console.log('Best Price:' +res[i].Price);
-    console.log('Inventory:' +res[i].StockQuantity);}
+    console.log('************************');
+    console.log('Item ID: ' +res[i].ItemID);
+    console.log('Product Name: ' +res[i].ProductName);
+    console.log('Department Name: ' +res[i].DepartmentName);
+    console.log('Best Price: ' +res[i].Price);
+    console.log('Inventory: ' +res[i].StockQuantity);}
     console.log("-----------------------------------");})
 
-     inquirer.prompt([{
-        type: 'input',
-        message: 'Which item would you like to purchase today?',
-        name: 'itemId'
-       },{
-       	type:'input',
-       	message: 'How many would you like?',
-       	name: 'quantity'
-       }]).then(function (answers) {
+  // prompt user to ask them the ID of the product they would like to buy
+
+  inquirer.prompt([
+    {
+    type: "input",
+    message: "What is the Item ID of the product you would like to buy?",
+    name: "id"
+    }, {
+      type: "input",
+      message: "How many would you like to purchase?",
+      name: "amount"
+    }]).then(function (answers) {
 
         connection.query('SELECT * FROM Products WHERE ProductName = ?', answers.itemId, function(err,res){
           if(err) throw err;
@@ -64,3 +67,8 @@ function order(){
         })
 });
 }
+
+
+
+
+
