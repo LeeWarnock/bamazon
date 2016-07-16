@@ -6,7 +6,7 @@ var connection=mysql.createConnection({
     port: 3306,
     user: 'root',
     password: 'Kelcy',
-    database: 'theGoods'
+    database: 'Bamazon_DB'
 })
 //checks connection
 connection.connect(function(err){
@@ -24,10 +24,10 @@ function order(){
   connection.query('SELECT * FROM Products',function(err,res){
   for(var i=0;i<res.length;i++){
   	console.log('************************');
-    console.log('Product Name:' +res[i].ProductName);  	
+    console.log('Product Name:' +res[i].ProductName);
     console.log('Department Name:' +res[i].DepartmentName);
     console.log('Best Price:' +res[i].Price);
-    console.log('Inventory:' +res[i].StockQuantity);} 
+    console.log('Inventory:' +res[i].StockQuantity);}
     console.log("-----------------------------------");})
 
      inquirer.prompt([{
@@ -39,34 +39,28 @@ function order(){
        	message: 'How many would you like?',
        	name: 'quantity'
        }]).then(function (answers) {
-        
+
         connection.query('SELECT * FROM Products WHERE ProductName = ?', answers.itemId, function(err,res){
           if(err) throw err;
 
-          
-  
+
+
              // Check stock
             if (answers.quantity > res[0].StockQuantity){
             console.log("Sorry that item is currently out of stock");
 
-            
+
             order();
-          } 
+          }
           // total amount due:
           else{
-            var total = answers.quantity * res[0].Price 
+            var total = answers.quantity * res[0].Price
 
             console.log("Your total is "+answers.quantity +" "+ answers.itemId +" " +total +" dollars. Thank you for shopping at Bamazon!");
 
             //updates stock
             connection.query('UPDATE Products SET StockQuantity = "'+(res[0].StockQuantity - answers.quantity)+'" WHERE ProductName = "'+answers.itemId+'"');
-           
           }
-
-        
-
         })
-
-        
 });
 }

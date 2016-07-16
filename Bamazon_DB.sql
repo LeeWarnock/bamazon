@@ -3,14 +3,14 @@ create database Bamazon_DB;
 use Bamazon_DB;
 
 CREATE TABLE Products(
-  ItemID integer not null auto_increment,
+  ItemId integer not null auto_increment,
   ProductName varchar(50) null,
   DepartmentName varchar(50) not null,
   Price integer not null,
   StockQuantity integer not null,
-  PRIMARY KEY (`ItemID`));
+  PRIMARY KEY (`id`));
   
-	INSERT INTO Products (ItemID, ProductName,DepartmentName,Price, StockQuantity) VALUES 
+	INSERT INTO Products (id, ProductName,DepartmentName,Price, StockQuantity) VALUES 
 (1,'My Butt, Your Butt: A Novella Signed First Edition','Books', 49.99, 669);
 (2,'30 LB Bag of assorted Watch Parts','Electronics', 22.69, 9999);
 (3,'Farm Fresh Dolphin Milk - 55 Gallon size','Grocery', 6999.66, 69);
